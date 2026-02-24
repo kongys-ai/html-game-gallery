@@ -28,10 +28,15 @@
     .badge { display:inline-block; padding:2px 8px; border:1px solid #3a2f2a; border-radius:999px; margin-right:6px; background:#fff; }
 
     .start-overlay {
-      position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:flex-start;
+      position:fixed;
+      inset:0;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:flex-start;
       background-color:#ffe8a3;
-      border-radius:12px;
-      z-index:5;
+      border-radius:0;
+      z-index:60;
       padding-top:28px;
       gap:18px;
     }
