@@ -237,7 +237,24 @@
 
     @media (max-width: 1024px) and (orientation: landscape) and (hover: none) and (pointer: coarse) {
       body { overflow:hidden; }
-      h1, .hud { display:none; }
+      .wrap {
+        margin:4px auto;
+        padding-bottom:120px;
+      }
+      h1, .hud, .help { display:none; }
+      .game-shell {
+        height:calc(100vh - 158px);
+        max-height:calc(100vh - 158px);
+        margin-bottom:96px;
+      }
+      canvas {
+        height:100%;
+        object-fit:contain;
+      }
+      .touch-ui {
+        bottom:max(0px, env(safe-area-inset-bottom));
+        padding:2px 8px calc(2px + env(safe-area-inset-bottom));
+      }
     }
   </style>
 </head>
