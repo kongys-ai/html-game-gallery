@@ -28,15 +28,15 @@
     .badge { display:inline-block; padding:2px 8px; border:1px solid #3a2f2a; border-radius:999px; margin-right:6px; background:#fff; }
 
     .start-overlay {
-      position:fixed;
+      position:absolute;
       inset:0;
       display:flex;
       flex-direction:column;
       align-items:center;
       justify-content:flex-start;
       background-color:#ffe8a3;
-      border-radius:0;
-      z-index:60;
+      border-radius:12px;
+      z-index:5;
       padding-top:28px;
       gap:18px;
     }
@@ -235,36 +235,9 @@
       canvas { touch-action:none; }
     }
 
-    @media (max-width: 1024px) and (orientation: landscape) {
+    @media (max-width: 1024px) and (orientation: landscape) and (hover: none) and (pointer: coarse) {
       body { overflow:hidden; }
-      .wrap {
-        margin:6px auto;
-        padding-bottom:118px;
-      }
-      .help { display:none; }
-      h1 { margin-bottom:4px; }
-      .hud { margin-bottom:4px; }
-      .game-shell {
-        width:100%;
-        height:calc(100vh - 170px);
-        max-height:calc(100vh - 170px);
-        margin-bottom:96px;
-      }
-      canvas {
-        width:100%;
-        height:100%;
-        object-fit:contain;
-      }
-      .touch-ui {
-        bottom:max(0px, env(safe-area-inset-bottom));
-        padding:2px 8px calc(2px + env(safe-area-inset-bottom));
-      }
-      .touch-panel { gap:6px; align-items:flex-end; }
-      .dpad { gap:42px; margin-top:6px; }
-      .touch-btn { min-width:56px; height:42px; font-size:15px; border-radius:12px; }
-      .actions { margin-bottom:0; gap:5px; }
-      .act-btn { min-width:56px; height:42px; font-size:15px; }
-      .act-label { font-size:10px; padding:1px 6px; }
+      h1, .hud { display:none; }
     }
   </style>
 </head>
@@ -1966,10 +1939,14 @@ function draw(){
   // coin UI (top-left, compact + pickup pulse)
   ctx.fillStyle = 'rgba(255, 251, 214, 0.95)';
   const coinW = 82;
-  ctx.fillRect(10, 10, coinW, 34);
+  ctx.beginPath();
+  ctx.roundRect(10, 10, coinW, 34, 12);
+  ctx.fill();
   ctx.strokeStyle = '#c49a2c';
   ctx.lineWidth = 2;
-  ctx.strokeRect(10, 10, coinW, 34);
+  ctx.beginPath();
+  ctx.roundRect(10, 10, coinW, 34, 12);
+  ctx.stroke();
 
   const cp = state.coinPulse;
   const pulseScale = 1 + cp * 0.35;
