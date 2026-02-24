@@ -7,7 +7,7 @@
   <style>
     body { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; background:#fff8f2; color:#3a2f2a; display:flex; justify-content:center; }
     .wrap { width:min(940px,95vw); margin:20px auto; padding-bottom:168px; }
-    .game-shell { position:relative; width:min(896px,100%); max-width:100%; overflow:hidden; border-radius:12px; }
+    .game-shell { position:relative; width:min(896px,100%); max-width:100%; overflow:hidden; border-radius:12px; margin-bottom:76px; }
     h1 { margin:0 0 8px; font-size:24px; display:flex; align-items:center; gap:10px; }
     .title-chick {
       width:34px; height:34px; background:#ffe066; border-radius:10px; position:relative;
@@ -30,7 +30,7 @@
     .start-overlay {
       position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:flex-start;
       background-color:#ffe8a3;
-      border-radius:10px;
+      border-radius:12px;
       z-index:5;
       padding-top:28px;
       gap:18px;
@@ -88,7 +88,7 @@
       color:#7a5a2b;
       border:4px solid #b88a4a;
       background:linear-gradient(#fffbe8,#ffeebf);
-      border-radius:10px;
+      border-radius:12px;
       cursor:pointer;
       box-shadow:0 4px 0 #b88a4a;
     }
@@ -108,7 +108,7 @@
       font-weight:700;
       padding:6px 12px;
       border:2px solid #8a5a2b;
-      border-radius:8px;
+      border-radius:12px;
       background:#fff6d6;
       color:#5a3a1f;
       cursor:pointer;
@@ -120,23 +120,24 @@
       left:50%;
       transform:translateX(-50%);
       width:min(896px, calc(95vw));
-      bottom:10px;
+      bottom:max(2px, env(safe-area-inset-bottom));
       z-index:20;
-      background:rgba(255,248,230,0.88);
-      border:2px solid #c8a96d;
-      border-radius:14px;
-      padding:10px 14px;
+      background:rgba(255,255,255,0.10);
+      border:1px solid rgba(255,255,255,0.20);
+      border-radius:12px;
+      padding:8px 12px;
       backdrop-filter: blur(2px);
       user-select:none;
       -webkit-user-select:none;
       box-sizing:border-box;
       overflow:hidden;
     }
+    .touch-ui.hidden { display:none !important; }
     .touch-panel { display:flex; justify-content:space-between; align-items:flex-end; gap:12px; }
-    .dpad { width:160px; display:grid; grid-template-columns:repeat(3, 50px); grid-template-rows:repeat(3, 44px); gap:5px; }
+    .dpad { display:flex; align-items:flex-end; gap:58px; }
     .touch-btn {
-      min-width:48px; height:42px; border:2px solid #7a5a2b; border-radius:10px;
-      background:#fff6d6; color:#5a3a1f; font-weight:700; font-size:15px;
+      min-width:66px; height:48px; border:3px solid #7a5a2b; border-radius:12px;
+      background:#fff6d6; color:#5a3a1f; font-weight:700; font-size:17px;
       touch-action:manipulation;
     }
     .touch-btn:active { transform:translateY(1px) scale(0.98); }
@@ -149,7 +150,7 @@
     .touch-spacer { opacity:0; pointer-events:none; }
     .actions { display:flex; gap:10px; align-items:flex-start; margin-bottom:18px; }
     .action-stack { display:flex; flex-direction:column; align-items:center; gap:4px; }
-    .act-btn { min-width:66px; height:48px; font-size:17px; border-radius:14px; }
+    .act-btn { min-width:66px; height:48px; font-size:17px; border-radius:12px; }
     .act-label {
       font-size:12px;
       font-weight:800;
@@ -160,19 +161,40 @@
       border-radius:999px;
     }
 
+    .fs-btn {
+      display:none;
+      position:fixed;
+      right:10px;
+      top:10px;
+      z-index:30;
+      border:2px solid #7a5a2b;
+      border-radius:12px;
+      background:rgba(255,246,214,0.9);
+      color:#5a3a1f;
+      font-size:12px;
+      font-weight:800;
+      padding:6px 10px;
+      touch-action:manipulation;
+    }
+
     @media (max-width: 1024px) {
+      .fs-btn { display:none; }
       .touch-ui {
-        left:10px;
-        right:10px;
+        left:8px;
+        right:8px;
         width:auto;
         transform:none;
-        padding:10px;
+        bottom:max(2px, env(safe-area-inset-bottom));
+        padding:6px 8px;
+        background:transparent;
+        border:none;
+        backdrop-filter:none;
       }
       .touch-panel { gap:8px; }
-      .dpad { width:162px; grid-template-columns:repeat(3,50px); grid-template-rows:repeat(3,46px); gap:4px; }
-      .touch-btn { min-width:48px; height:44px; font-size:15px; }
+      .dpad { gap:44px; }
+      .touch-btn { min-width:58px; height:44px; font-size:16px; }
       .actions { gap:6px; margin-bottom:8px; }
-      .act-btn { min-width:64px; height:50px; font-size:17px; }
+      .act-btn { min-width:58px; height:44px; font-size:16px; }
       .act-label { font-size:11px; padding:2px 6px; }
       h1 { font-size:20px; }
       .hud { font-size:12px; }
@@ -181,8 +203,8 @@
       /* mobile start overlay: fullscreen modal to avoid overlap on short canvas */
       .start-overlay {
         position:fixed;
-        inset:12px;
-        border-radius:16px;
+        inset:0;
+        border-radius:0;
         justify-content:center;
         padding-top:18px;
         gap:12px;
@@ -207,10 +229,43 @@
       }
       canvas { touch-action:none; }
     }
+
+    @media (max-width: 1024px) and (orientation: landscape) {
+      body { overflow:hidden; }
+      .wrap {
+        margin:6px auto;
+        padding-bottom:118px;
+      }
+      .help { display:none; }
+      h1 { margin-bottom:4px; }
+      .hud { margin-bottom:4px; }
+      .game-shell {
+        width:100%;
+        height:calc(100vh - 170px);
+        max-height:calc(100vh - 170px);
+        margin-bottom:96px;
+      }
+      canvas {
+        width:100%;
+        height:100%;
+        object-fit:contain;
+      }
+      .touch-ui {
+        bottom:max(0px, env(safe-area-inset-bottom));
+        padding:2px 8px calc(2px + env(safe-area-inset-bottom));
+      }
+      .touch-panel { gap:6px; align-items:flex-end; }
+      .dpad { gap:42px; margin-top:6px; }
+      .touch-btn { min-width:56px; height:42px; font-size:15px; border-radius:12px; }
+      .actions { margin-bottom:0; gap:5px; }
+      .act-btn { min-width:56px; height:42px; font-size:15px; }
+      .act-label { font-size:10px; padding:1px 6px; }
+    }
   </style>
 </head>
 <body>
   <div class="wrap">
+    <button id="fsBtn" class="fs-btn">全体画面</button>
     <h1 id="title"><span class="title-chick" aria-hidden="true"><span class="eye e1"></span><span class="eye e2"></span><span class="beak"></span><span class="leg l1"></span><span class="leg l2"></span></span>ひよこジャンプ（ステージ01）</h1>
     <div class="hud" id="hud">← → 移動 / ↑↓ はしご / Z ジャンプ / C たまご投げ / R リトライ（最初にキー入力で音ON）</div>
     <div class="game-shell">
@@ -236,15 +291,14 @@
     <div id="touchUI" class="touch-ui" aria-label="mobile controls">
       <div class="touch-panel">
         <div class="dpad">
-          <button class="touch-btn touch-spacer">.</button>
-          <button class="touch-btn" data-key="arrowup">↑</button>
-          <button class="touch-btn touch-spacer">.</button>
-          <button class="touch-btn" data-key="arrowleft">←</button>
-          <button class="touch-btn" data-key="arrowdown">↓</button>
-          <button class="touch-btn" data-key="arrowright">→</button>
-          <button class="touch-btn touch-spacer">.</button>
-          <button class="touch-btn touch-spacer">.</button>
-          <button class="touch-btn touch-spacer">.</button>
+          <div class="action-stack">
+            <button class="touch-btn act-btn" data-key="arrowleft">←</button>
+            <div class="act-label">LEFT</div>
+          </div>
+          <div class="action-stack">
+            <button class="touch-btn act-btn" data-key="arrowright">→</button>
+            <div class="act-label">RIGHT</div>
+          </div>
         </div>
         <div class="actions">
           <div class="action-stack">
@@ -415,6 +469,9 @@ const startBtn = document.getElementById('startBtn');
 const endControls = document.getElementById('endControls');
 const endRestartBtn = document.getElementById('endRestartBtn');
 const endExitBtn = document.getElementById('endExitBtn');
+const touchUI = document.getElementById('touchUI');
+const fsBtn = document.getElementById('fsBtn');
+const gameShell = document.querySelector('.game-shell');
 const touchButtons = Array.from(document.querySelectorAll('.touch-btn'));
 
 const STAGE_STARTS = [
@@ -799,6 +856,26 @@ addEventListener('keydown', e => {
 addEventListener('keyup', e => state.keys[e.key.toLowerCase()] = false);
 addEventListener('blur', () => { state.keys = {}; });
 
+async function toggleFullscreen() {
+  try {
+    // use full document so bottom controls stay visible in fullscreen
+    if (!document.fullscreenElement) {
+      await document.documentElement.requestFullscreen();
+    } else {
+      await document.exitFullscreen();
+    }
+  } catch {}
+}
+
+function syncFullscreenButton(){
+  if (!fsBtn) return;
+  fsBtn.textContent = document.fullscreenElement ? '戻す' : '全体画面';
+}
+
+fsBtn?.addEventListener('click', toggleFullscreen);
+fsBtn?.addEventListener('touchstart', (ev) => { ev.preventDefault(); toggleFullscreen(); }, { passive:false });
+document.addEventListener('fullscreenchange', syncFullscreenButton);
+
 for (const btn of touchButtons) {
   const key = btn.dataset.key;
   if (!key) continue;
@@ -834,6 +911,7 @@ function beginGame(ev){
   if (state.audio.ctx?.state === 'suspended') state.audio.ctx.resume();
   state.gameStarted = true;
   startOverlay?.classList.add('hidden');
+  touchUI?.classList.remove('hidden');
   endControls?.classList.add('hidden');
   blip(520, 0.07, 'triangle', 0.08, 780);
 }
@@ -844,6 +922,7 @@ startBtn?.addEventListener('pointerdown', beginGame);
 
 endRestartBtn?.addEventListener('click', () => {
   state.gameStarted = false;
+  touchUI?.classList.add('hidden');
   endControls?.classList.add('hidden');
   startOverlay?.classList.remove('hidden');
   resetGame(0);
@@ -902,9 +981,11 @@ function update(dt){
 
   if (!state.gameStarted) {
     hud.textContent = 'スタートボタンを押して開始';
+    touchUI?.classList.add('hidden');
     endControls?.classList.add('hidden');
     return;
   }
+  touchUI?.classList.remove('hidden');
 
   if (!p.alive || p.won) {
     const isFinalEnd = p.won && state.stageIndex >= STAGES.length - 1;
